@@ -23,6 +23,7 @@
         $('input[name="daterange"]').daterangepicker(
           {
             opens: "left",
+            autoApply: true,
           },
           function (start, end, label) {
             calculateDateRangeStats(start, end);
@@ -33,9 +34,9 @@
           const startMoment = moment(startDate);
           const endMoment = moment(endDate);
 
-          const selectedMonths = endMoment.diff(startMoment, "months") + 1; // Add 1 to be inclusive
-          const selectedWeeks = endMoment.diff(startMoment, "weeks") + 1;
-          const selectedDays = endMoment.diff(startMoment, "days") + 1;
+          const selectedMonths = endMoment.diff(startMoment, "months"); //+ 1; // Add 1 to be inclusive
+          const selectedWeeks = endMoment.diff(startMoment, "weeks"); //+ 1;
+          const selectedDays = endMoment.diff(startMoment, "days"); //+ 1;
 
           console.log("Selected Months:", selectedMonths);
           console.log("Selected Weeks:", selectedWeeks);
