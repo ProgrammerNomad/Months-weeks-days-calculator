@@ -1,0 +1,52 @@
+<html>
+  <head>
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css"
+    />
+  </head>
+  <body>
+    <input type="text" name="daterange" value="01/01/2024 - 01/15/2024" />
+
+    <br />
+    <br />
+    <p>Months: <span id="months"></span></p>
+    <p>Weeks: <span id="weeks"></span></p>
+    <p>Days: <span id="days"></span></p>
+
+    <script src="https://cdn.jsdelivr.net/jquery/latest/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
+    <script>
+      $(function () {
+        $('input[name="daterange"]').daterangepicker(
+          {
+            opens: "left",
+          },
+          function (start, end, label) {
+            calculateDateRangeStats(start, end);
+          }
+        );
+
+        function calculateDateRangeStats(startDate, endDate) {
+          const startMoment = moment(startDate);
+          const endMoment = moment(endDate);
+
+          const selectedMonths = endMoment.diff(startMoment, "months") + 1; // Add 1 to be inclusive
+          const selectedWeeks = endMoment.diff(startMoment, "weeks") + 1;
+          const selectedDays = endMoment.diff(startMoment, "days") + 1;
+
+          console.log("Selected Months:", selectedMonths);
+          console.log("Selected Weeks:", selectedWeeks);
+          console.log("Selected Days:", selectedDays);
+
+          // Update your UI elements with these values as needed
+          $("#months").text(selectedMonths);
+          $("#weeks").text(selectedWeeks);
+          $("#days").text(selectedDays);
+        }
+      });
+    </script>
+  </body>
+</html>
