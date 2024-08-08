@@ -1,55 +1,73 @@
 <!DOCTYPE html>
 <html>
-<head>
-  <title>Date Range Picker Possibilities</title>
-  <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
-  <style>
-    body { font-family: sans-serif; }
-    .result-container { margin-top: 20px; }
-    .result-container p { margin: 5px 0; }
-  </style>
-</head>
-<body>
-  <input type="text" name="daterange" />
+  <head>
+    <title>Date Range Picker Possibilities</title>
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css"
+    />
+    <style>
+      body {
+        font-family: sans-serif;
+      }
+      .result-container {
+        margin-top: 20px;
+      }
+      .result-container p {
+        margin: 5px 0;
+      }
+    </style>
+  </head>
+  <body>
+    <input type="text" name="daterange" />
 
-  <div class="result-container">
-    <p>Possible Months: <span id="months"></span></p>
-    <p>Possible Weeks: <span id="weeks"></span></p>
-    <p>Possible Days: <span id="days"></span></p>
-  </div>
+    <div class="result-container">
+      <p>Possible Months: <span id="months"></span></p>
+      <p>Possible Weeks: <span id="weeks"></span></p>
+      <p>Possible Days: <span id="days"></span></p>
+    </div>
 
-  <script src="https://cdn.jsdelivr.net/jquery/latest/jquery.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/jquery/latest/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
 
-  <script>
-    $(function () {
-    $('input[name="daterange"]').daterangepicker({
-        opens: 'left',
-    }, function (start, end, label) {
-        calculateDateRangePossibilities(start, end);
-    });
+    <script>
+      $(function () {
+        $('input[name="daterange"]').daterangepicker(
+          {
+            opens: "left",
+          },
+          function (start, end, label) {
+            calculateDateRangePossibilities(start, end);
+          }
+        );
 
-    function calculateDateRangePossibilities(startDate, endDate) {
-        const startMoment = moment(startDate);
-        const endMoment = moment(endDate);
+        function calculateDateRangePossibilities(startDate, endDate) {
+          const startMoment = moment(startDate);
+          const endMoment = moment(endDate);
 
-        const totalDays = endMoment.diff(startMoment, 'days') ;//+ 1; // Total days including start and end
+          const totalDays = endMoment.diff(startMoment, "days"); //+ 1; // Total days including start and end
 
-        const totalMonths = Math.floor(totalDays / 30); // Approximate months (assuming 30 days per month)
-        const remainingDaysAfterMonths = totalDays - (totalMonths * 30);
-        
-        // calculate weeks from remaining days after months
-        const percentileWeeks = Math.floor(remainingDaysAfterMonths / 7);
-        // calculate remaining days
-        const remainingDays = remainingDaysAfterMonths - (percentileWeeks * 7);
+          const totalMonths = Math.floor(totalDays / 30); // Approximate months (assuming 30 days per month)
+          const remainingDaysAfterMonths = totalDays - totalMonths * 30;
 
-        $('#months').text(totalMonths === 1 ? '1 Month' : `${totalMonths} Months`);
-        $('#weeks').text(percentileWeeks === 1 ? '1 Week' : `${percentileWeeks} Weeks`);
-        $('#days').text(remainingDays === 1 ? '1 Day' : `${remainingDays} Days`);
-    }
-});
+          // calculate weeks from remaining days after months
+          const percentileWeeks = Math.floor(remainingDaysAfterMonths / 7);
+          // calculate remaining days
+          const remainingDays = remainingDaysAfterMonths - percentileWeeks * 7;
 
-  </script>
-</body>
+          $("#months").text(
+            totalMonths === 1 ? "1 Month" : `${totalMonths} Months`
+          );
+          $("#weeks").text(
+            percentileWeeks === 1 ? "1 Week" : `${percentileWeeks} Weeks`
+          );
+          $("#days").text(
+            remainingDays === 1 ? "1 Day" : `${remainingDays} Days`
+          );
+        }
+      });
+    </script>
+  </body>
 </html>
