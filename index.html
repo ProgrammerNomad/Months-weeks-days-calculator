@@ -37,6 +37,7 @@
         $('input[name="daterange"]').daterangepicker(
           {
             opens: "left",
+            autoApply: true,
           },
           function (start, end, label) {
             calculateDateRangePossibilities(start, end);
