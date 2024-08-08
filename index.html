@@ -1,53 +1,79 @@
+<!DOCTYPE html>
 <html>
-  <head>
-    <link
-      rel="stylesheet"
-      type="text/css"
-      href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css"
-    />
-  </head>
-  <body>
-    <input type="text" name="daterange" value="01/01/2024 - 01/15/2024" />
+<head>
+  <title>Date Range Picker Possibilities</title>
+  <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
+  <style>
+    body { font-family: sans-serif; }
+    .result-container { margin-top: 20px; }
+    .result-container p { margin: 5px 0; }
+  </style>
+</head>
+<body>
+  <input type="text" name="daterange" value="01/01/2024 - 01/15/2024" />
 
-    <br />
-    <br />
-    <p>Months: <span id="months"></span></p>
-    <p>Weeks: <span id="weeks"></span></p>
-    <p>Days: <span id="days"></span></p>
+  <div class="result-container">
+    <p>Possible Months: <span id="months"></span></p>
+    <p>Possible Weeks: <span id="weeks"></span></p>
+    <p>Possible Days: <span id="days"></span></p>
+  </div>
 
-    <script src="https://cdn.jsdelivr.net/jquery/latest/jquery.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
-    <script>
-      $(function () {
-        $('input[name="daterange"]').daterangepicker(
-          {
-            opens: "left",
-            autoApply: true,
-          },
-          function (start, end, label) {
-            calculateDateRangeStats(start, end);
-          }
-        );
+  <script src="https://cdn.jsdelivr.net/jquery/latest/jquery.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
 
-        function calculateDateRangeStats(startDate, endDate) {
-          const startMoment = moment(startDate);
-          const endMoment = moment(endDate);
-
-          const selectedMonths = endMoment.diff(startMoment, "months"); //+ 1; // Add 1 to be inclusive
-          const selectedWeeks = endMoment.diff(startMoment, "weeks"); //+ 1;
-          const selectedDays = endMoment.diff(startMoment, "days"); //+ 1;
-
-          console.log("Selected Months:", selectedMonths);
-          console.log("Selected Weeks:", selectedWeeks);
-          console.log("Selected Days:", selectedDays);
-
-          // Update your UI elements with these values as needed
-          $("#months").text(selectedMonths);
-          $("#weeks").text(selectedWeeks);
-          $("#days").text(selectedDays);
-        }
+  <script>
+    $(function() {
+      $('input[name="daterange"]').daterangepicker({
+        opens: 'left'
+      }, function(start, end, label) {
+        calculateDateRangePossibilities(start, end);
       });
-    </script>
-  </body>
+
+      function calculateDateRangePossibilities(startDate, endDate) {
+        const startMoment = moment(startDate);
+        const endMoment = moment(endDate);
+
+        const possibleMonths = getPossibleMonths(startMoment, endMoment);
+        const possibleWeeks = getPossibleWeeks(startMoment, endMoment);
+        const possibleDays = getPossibleDays(startMoment, endMoment);
+
+        console.log("Possible Months:", possibleMonths);
+        console.log("Possible Weeks:", possibleWeeks);
+        console.log("Possible Days:", possibleDays);
+
+        $('#months').text(possibleMonths.join(', ')); 
+        $('#weeks').text(possibleWeeks.join(', '));
+        $('#days').text(possibleDays.join(', '));
+      }
+
+      function getPossibleMonths(start, end) {
+        const months = [];
+        while (start.isSameOrBefore(end, 'month')) {
+          months.push(start.format('MMMM'));
+          start.add(1, 'month');
+        }
+        return months;
+      }
+
+      function getPossibleWeeks(start, end) {
+        const weeks = [];
+        while (start.isSameOrBefore(end, 'week')) {
+          weeks.push(`Week ${start.isoWeek()}`);
+          start.add(1, 'week');
+        }
+        return weeks;
+      }
+
+      function getPossibleDays(start, end) {
+        const days = [];
+        while (start.isSameOrBefore(end)) {
+          days.push(start.format('Do MMMM')); // E.g., "1st January"
+          start.add(1, 'day');
+        }
+        return days;
+      }
+    });
+  </script>
+</body>
 </html>
